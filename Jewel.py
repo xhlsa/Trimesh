@@ -1,3 +1,4 @@
+
 import trimesh
 import numpy as np
 
@@ -18,26 +19,24 @@ def add_chamfer_refractions(mesh, chamfer_ratio):
     # Iterate through each edge and create chamfers
     edges = mesh.edges_unique
     for edge in edges:
-        edge_midpoint = np.mean(mesh.vertices[mesh.edges_unique[edge]], axis=0)
-        mesh.vertices[mesh.edges_unique[edge]] = (
-            mesh.vertices[mesh.edges_unique[edge]] * (1 - chamfer_ratio) + 
+        edge_midpoint = np.mean(mesh.vertices[mesh.edges[edge]], axis=0)
+        mesh.vertices[mesh.edges[edge]] = (
+            mesh.vertices[mesh.edges[edge]] * (1 - chamfer_ratio) + 
             edge_midpoint * chamfer_ratio
         )
     return mesh
 
-# Parameters for the jewel
+# Parameters for the very rough jewel
 length = 1.0
 width = 0.5
 height = 0.3
-divisions = 3
+divisions_very_rough = 1  # Very rough look
 chamfer_ratio = 0.1
 
-# Create the jewel mesh
-jewel_mesh = create_oval_mesh(length, width, height, divisions)
-jewel_mesh = add_chamfer_refractions(jewel_mesh, chamfer_ratio)
+# Create and export the very rough jewel mesh
+jewel_mesh_very_rough = create_oval_mesh(length, width, height, divisions_very_rough)
+jewel_mesh_very_rough = add_chamfer_refractions(jewel_mesh_very_rough, chamfer_ratio)
 
-# Export the mesh
-jewel_mesh.export('many_faced_jewel.stl')
-
-# For visualization in notebook
-jewel_mesh.show()
+# Exporting the mesh
+exported_file_path = 'very_rough_jewel.stl'
+jewel_mesh_very_rough.export(exported_file_path)
